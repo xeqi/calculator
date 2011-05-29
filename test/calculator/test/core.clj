@@ -25,7 +25,7 @@
 (deftest parenthesis
   (is (= 3 (calculate "(5 - 2)")))
   (is (= 3 (calculate "9 / (5 - 2)")))
-  (is (= 2 (calculate "26 / (3 * (7 - 4 + 1)"))))
+  (is (= 2 (calculate "26 / (3 * (7 - 4 + 1))"))))
 
 (deftest white-space-is-meaningless
   (is (= 3 (calculate "  ( 4+23  )-24   "))))
