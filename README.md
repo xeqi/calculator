@@ -4,7 +4,7 @@ This is a project to be done for one of the Houston Clojure group meetings.
 
 Build a function `calculate` that parses and evaluates a string.
 
-There are lots of examples of doing this in an imperative or OO language.  Keeping track of the input string and the operator stack might be just stateful enough to be problematic.
+Keeping track of the input string and the operator stack might be just stateful enough to be problematic.
 
 Some ideas:
 
