@@ -20,7 +20,9 @@
   (is (= 0 (calculate "1 / 2"))))
 
 (deftest order-of-operations
-  (is (= 19 (calculate "4 + 3 * 5"))))
+  (is (= 19 (calculate "4 + 3 * 5")))
+  (is (= 19 (calculate "3 * 5 + 4")))
+  (is (= 26 (calculate "4 + 3 * 5 + 7"))))
 
 (deftest parenthesis
   (is (= 3 (calculate "(5 - 2)")))
