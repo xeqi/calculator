@@ -17,11 +17,12 @@
 (defn sequ [f & parsers]
   (reduce <*> (pure f) parsers))
 
-(defn bind [m f]
-  (fn [string]
-    (for [[v1 s1] (m string)
-          [v2 s2] ((f v1) s1)]
-      [v2 s2])))
+(defn bind [f]
+  (fn [r]
+    (apply concat (map (fn [[v s]] ((f v) s)) r))))
+
+(defn pipe [m & bindable]
+  (apply comp (reverse (cons m (map bind bindable)))))
 
 (defn choice [f g]
   (fn [string]
@@ -70,10 +71,12 @@
         digits))
 
 (defn chainl1 [p op]
-  (letfn [(fasf [l]
-                (choices (bind op (fn [o] (bind p (fn [r] (fasf (o l r))))))
+  (letfn [(more [l]
+                (choices (pipe op
+                               (fn [o] (pipe p
+                                            (fn [r] (more (o l r))))))
                          (pure l)))]
-      (bind p fasf))) 
+      (comp (bind more) p))) 
 
 (def addop
   (choices (sequ (constantly +) (character \+))
@@ -102,8 +105,9 @@
     (list ['eol string])))
 
 (def lex
-  (sequ (curry 2 (fn [x y] x)) expr (ignoring-whitespace eol)))
-
+  (sequ (curry 2 (fn [x y] x))
+        expr
+        (ignoring-whitespace eol)))
 
 (defn calculate [string]
   (first (first (lex string))))
